@@ -176,7 +176,6 @@ void filosofo()
     while(1)
     {
         meditar(id);
-        // Comer
         cogertenedores(id);
         comer(id);
         soltartenedores(id);
