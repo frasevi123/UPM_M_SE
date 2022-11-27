@@ -1,0 +1,12 @@
+# ficheros swap 
+*.swp
+
+# ficheros cf de VHDL
+*.cf
+
+# ficheros intermedios
+*.o
+*.a
+
+# ejecutables
+*.elf
