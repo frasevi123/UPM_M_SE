@@ -18,7 +18,7 @@ $(TRGT): $(ST) $(DFF) $(SR)
 	$(GHDL) -e $(SRC)
 	$(GHDL) -a $(TST).vhdl
 	$(GHDL) -e $(TST)
-	$(GHDL) -r $(TST) --wave=$(TRGT) --stop-time=50ns
+	$(GHDL) -r $(TST) --wave=$(TRGT) --stop-time=400ns
 
 $(ST): $(st)
 	$(GHDL) -a $(sr).vhdl

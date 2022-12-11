@@ -22,24 +22,27 @@ architecture arch_sumsec of sumsec is
 			  Q, No_Q : out STD_LOGIC);
 	end component;
 	
-	signal s_nand_1, s_sr0, s_sr1, s_A, s_B, s_Cout, s_Sum, s_Q, s_No_Q : STD_LOGIC;
-
+	signal s_nand_1, s_sr0, s_sr1, s_int1, s_int0, s_A, s_B, s_Cout, s_Sum, s_Q, s_No_Q : STD_LOGIC := '0';
+	
 begin
 
     s_nand_1 <= Clk NAND SC;
     
-    s_A <= s_sr0;
-    s_B <= s_sr1;
 
 	sr0 : shift_register
 	port map (si => s_A,
               clk => s_nand_1,
               so => s_sr0);
+              
+    s_int0 <= s_sr0;
+    s_A <= s_int0;
 
 	sr1 : shift_register
 	port map (si => s_B,
               clk => s_nand_1,
               so => s_sr1);
+    s_int1 <= s_sr1;
+    s_B <= s_int1;
 
 	sum0 : ST
 	port map (A => s_A, 

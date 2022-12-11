@@ -18,16 +18,16 @@ begin
                             SM => SM_s);
     
     clk_proc : process begin
-        clk_s <= '0';
+        Clk_s <= '1';
             wait for 5 ns;
-        clk_s <= '1';
+        Clk_s <= '0';
             wait for 5 ns;
     end process;
 
     test_proc : process begin
-        SC_s <= '0';
-            wait for 40 ns;
         SC_s <= '1';
+            wait for 40 ns;
+        SC_s <= '0';
             wait for 40 ns;
         SC_s <= '1';
             wait for 40 ns;
