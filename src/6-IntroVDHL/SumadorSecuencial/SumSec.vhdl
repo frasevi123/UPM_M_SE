@@ -1,65 +1,75 @@
 library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 
-entity sumsec is
-	port (Clk, SC : in  STD_LOGIC;
-	      SM      : out STD_LOGIC);
-end sumsec;
+entity SumSec is
+    port (Clk, SC : in  STD_LOGIC;
+          SM      : out STD_LOGIC
+          );
+end SumSec;
 
-architecture arch_sumsec of sumsec is
-	component ST
+architecture arch_sumsec of SumSec is
+    component ST
         port (A, B, Cin : in  STD_LOGIC;
               Cout, S   : out STD_LOGIC);
     end component;
 
-	component shift_register
-		port (si, clk : in  STD_LOGIC;
-		      so      : out STD_LOGIC);
-	end component;
+    component shift_register
+        port (si, clk : in  STD_LOGIC;
+              so      : out STD_LOGIC);
+    end component;
 
-	component D_FlipFlop
-		port (D, Clk  : in  STD_LOGIC;
-			  Q, No_Q : out STD_LOGIC);
-	end component;
-	
-	signal s_nand_1, s_sr0, s_sr1, s_int1, s_int0, s_A, s_B, s_Cout, s_Sum, s_Q, s_No_Q : STD_LOGIC := '0';
-	
+    component D_FlipFlop
+        port (D, Clk  : in  STD_LOGIC;
+              Q, No_Q : out STD_LOGIC);
+    end component;
+    
+    
+    signal CLK_s   : STD_LOGIC;
+    
+    signal SRAo_s  : STD_LOGIC;
+    signal SRBo_s  : STD_LOGIC;
+    
+    signal DFFQ_s  : STD_LOGIC;
+    signal DFFQn_s : STD_LOGIC;
+    
+    signal S_s     : STD_LOGIC;
+    signal Cout_s  : STD_LOGIC;
+    
+    signal SM_s    : STD_LOGIC;
+    
 begin
 
-    s_nand_1 <= Clk NAND SC;
-    
+    CLK_s <= Clk NAND SC;
 
-	sr0 : shift_register
-	port map (si => s_A,
-              clk => s_nand_1,
-              so => s_sr0);
+    SR_A : shift_register
+    port map (si  => SRAo_s,
+              clk => CLK_s,
+              so  => SRAo_s);
+
+    SR_B : shift_register
+    port map (si  => SRBo_s,
+              clk => CLK_s,
+              so  => SRBo_s);
               
-    s_int0 <= s_sr0;
-    s_A <= s_int0;
+    DFF : D_FlipFlop
+    port map (D    => Cout_s,
+              Clk  => CLK_s,
+              Q    => DFFQ_s,
+              No_Q => DFFQn_s);
+              
+              
+    Sumador : ST
+    port map (A    => SRAo_s,
+              B    => SRBo_s,
+              Cin  => DFFQ_s,
+              S    => S_s,
+              Cout => Cout_s);
 
-	sr1 : shift_register
-	port map (si => s_B,
-              clk => s_nand_1,
-              so => s_sr1);
-    s_int1 <= s_sr1;
-    s_B <= s_int1;
+    SR_c : shift_register
+    port map (si  => S_s,
+              clk => CLK_s,
+              so  => SM_s);
 
-	sum0 : ST
-	port map (A => s_A, 
-              B => s_B,
-              Cin => s_Q,
-              Cout => s_Cout,
-              S => s_Sum);
-
-	D0 : D_FlipFlop
-	port map(D => s_Cout,
-             Clk => s_nand_1,
-             Q => s_Q,
-             No_Q => s_No_Q);
-
-	sr2 : shift_register
-	port map (si => s_Sum,
-              clk => s_nand_1,
-              so => SM);
+    SM <= SM_s;
 
 end arch_sumsec;

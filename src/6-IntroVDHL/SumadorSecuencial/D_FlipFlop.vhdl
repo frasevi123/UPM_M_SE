@@ -13,8 +13,8 @@ begin
     begin
         if (Clk'event and Clk='1') then
             Qt <= D;
-        end if
-    end process
+        end if;
+    end process;
     Q <= Qt;
     No_Q <= not Qt;
 end architecture;
