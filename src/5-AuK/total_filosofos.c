@@ -140,34 +140,57 @@ void init_uart(void)
 #define NUM_FIL 5
 
 Tmutex semprint;
-#define prints(...) mutex_lock(&semprint); printf(__VA_ARGS__); mutex_unlock(&semprint);
+#define prints(...) ({\
+        mutex_lock(&semprint);\
+        printf(__VA_ARGS__);\
+        mutex_unlock(&semprint);\
+    })
 
-Tsemaphore tenedores[NUM_FIL];
+unsigned int tenedores[NUM_FIL];
+Tsemaphore   turno;
 
-void comer(int id) {
-    prints("[Filósofo %d] comiendo.\n", id);
-}
 
+
+/*
+ * Esta solución no es en realidad de asignación total. Hay un único semáforo
+ * que controla las lecturas sincronizadas del array de tenedores, lo que
+ * garantiza que son atómicas. Pero sin un mecanismo de semáforos más complejo
+ * al estilo de pthread_mutex_trylock, que compruebe el estado del semáforo
+ * de forma atómica antes de cogerlo, creo que no se puede realizar una
+ * solución real de asignación total.
+ */
 void cogertenedores(int id) {
+    int cent = 0;
     int ten1 = id;
     int ten2 = (id + 1) % 5;
     
-    wait(&tenedores[ten1]); /* TODO: ¿cómo hacemos asignación total con estas llamadas? */
+    wait(&turno);
     
+    while(cent != 1)
+    {
+        if (tenedores[ten1] == 0 && tenedores[ten2] == 0)
+        {
+            tenedores[ten1] = 1;
+            tenedores[ten2] = 1;
+            cent = 1;
+        }
+    }
+    
+    signal(&turno);
 }
 
 void soltartenedores(int id) {
     int ten1 = id;
     int ten2 = (id + 1) % 5;
     
-    prints("[Filósofo %d] soltando tenedores %d y %d.\n", id, ten1, ten2);
-    signal(&tenedores[ten1]);
-    signal(&tenedores[ten2]);
+    wait(&turno);
     
-}
+    prints("[Filósofo %d] suelta tenedores %d y %d.\n", id, ten1, ten2);
+    tenedores[ten1] = 0;
+    tenedores[ten2] = 0;
+    
+    signal(&turno);
 
-void meditar(int id) {
-    prints("[Filósofo %d] meditando.\n", id);
 }
 
 void filosofo()
@@ -176,9 +199,9 @@ void filosofo()
 
     while(1)
     {
-        meditar(id);
+        prints("[Filósofo %d] meditando.\n", id);
         cogertenedores(id);
-        comer(id);
+        prints("[Filósofo %d] comiendo.\n", id);
         soltartenedores(id);
     }
 }
@@ -191,13 +214,18 @@ int main(void)
     int i, x;
     int filosofos[NUM_FIL];
     
+    for (i = 0; i < NUM_FIL; i++) {
+        tenedores[i] = 0;
+    }
+    
+    
     x = init_AuK(39.6288E+6,0.01);
     
     if (x == 0)
     {
         init_semaphore(&semprint, 1);
+        init_semaphore(&turno, 1);
         for (i = 0; i < NUM_FIL; i++) {
-            init_semaphore(&tenedores[i], 1);
             filosofos[i] = create_task(__builtin_tblpage(filosofo),
                                        __builtin_tbloffset(filosofo), 300, 1);
         }
