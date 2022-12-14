@@ -6,44 +6,63 @@ end test_SumSec;
 
 architecture t_ss of test_SumSec is
     component SumSec is
-    port (Clk, SC : in  STD_LOGIC;
-          SM      : out STD_LOGIC);
+        port (Clk, SC : in  STD_LOGIC;
+              iA, iB  : in  STD_LOGIC;
+              SM      : out STD_LOGIC);
     end component;
+
+    constant T : time := 10 ns;
     
     signal Clk_s, SC_s, SM_s : STD_LOGIC;
+    signal iA_s, iB_s        : STD_LOGIC;
+
 begin
 
-    test : SumSec
-    port map (Clk => Clk_s,
-              SC  => SC_s,
-              SM  => SM_s);
+    test : SumSec port map (Clk => Clk_s,
+                            SC => SC_s,
+                            iA => iA_s,
+                            iB => iB_s,
+                            SM => SM_s);
+    
+    SC_s <= '1';
     
     clk_proc : process begin
         Clk_s <= '1';
-            wait for 5 ns;
+            wait for T/2;
         Clk_s <= '0';
-            wait for 5 ns;
+            wait for T/2;
     end process;
 
     test_proc : process begin
-        SC_s <= '1';
-            wait for 40 ns;
-        SC_s <= '0';
-            wait for 40 ns;
-        SC_s <= '1';
-            wait for 40 ns;
-        SC_s <= '0';
-            wait for 40 ns;
-        SC_s <= '1';
-            wait for 40 ns;
-        SC_s <= '0';
-            wait for 40 ns;
-        SC_s <= '1';
-            wait for 40 ns;
-        SC_s <= '0';
-            wait for 40 ns;
-        SC_s <= '1';
-            wait for 40 ns;
+            iA_s <= '0';
+            iB_s <= '0';
+            wait for T;
+            
+            iA_s <= '1';
+            iB_s <= '0';
+            wait for T;
+            
+            iA_s <= '1';
+            iB_s <= '0';
+            wait for T;
+            
+            iA_s <= '1';
+            iB_s <= '0';
+            wait for T;
+            
+            iA_s <= '1';
+            iB_s <= '0';
+            wait for T;
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
     end process;
 
 end architecture t_ss;

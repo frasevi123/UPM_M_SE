@@ -3,8 +3,8 @@ use IEEE.STD_LOGIC_1164.ALL;
 
 entity SumSec is
     port (Clk, SC : in  STD_LOGIC;
-          SM      : out STD_LOGIC
-          );
+          iA, iB  : in  STD_LOGIC;
+          SM      : out STD_LOGIC);
 end SumSec;
 
 architecture arch_sumsec of SumSec is
@@ -26,8 +26,8 @@ architecture arch_sumsec of SumSec is
     
     signal CLK_s   : STD_LOGIC;
     
-    signal SRAo_s  : STD_LOGIC;
-    signal SRBo_s  : STD_LOGIC;
+    signal SRAo_s  : STD_LOGIC; --
+    signal SRBo_s  : STD_LOGIC; --
     
     signal DFFQ_s  : STD_LOGIC;
     signal DFFQn_s : STD_LOGIC;
@@ -42,12 +42,12 @@ begin
     CLK_s <= Clk NAND SC;
 
     SR_A : shift_register
-    port map (si  => SRAo_s,
+    port map (si  => iA,
               clk => CLK_s,
               so  => SRAo_s);
 
     SR_B : shift_register
-    port map (si  => SRBo_s,
+    port map (si  => iB,
               clk => CLK_s,
               so  => SRBo_s);
               
