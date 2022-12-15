@@ -5,32 +5,24 @@ TRGT = wave.ghw
 SRC = SumSec
 TST = test_SumSec
 
-st  = ST
-dff = D_FlipFlop
-sr  = shift_register
+.PHONY: all clean re open
 
-.PHONY: all clean re
+all: ST D_FlipFlop SR $(TRGT)
 
-all: $(ST) $(DFF) $(SR) $(TRGT) 
-
-$(TRGT): $(ST) $(DFF) $(SR)
+$(TRGT): $(st) $(DFF) $(SR)
 	$(GHDL) -a $(SRC).vhdl
-	$(GHDL) -e $(SRC)
 	$(GHDL) -a $(TST).vhdl
 	$(GHDL) -e $(TST)
 	$(GHDL) -r $(TST) --wave=$(TRGT) --stop-time=400ns
 
-$(ST): $(st)
-	$(GHDL) -a $(sr).vhdl
-	$(GHDL) -e $(sr)
+ST: ST.vhdl
+	$(GHDL) -a $^
 
-$(DFF): $(dff)
-	$(GHDL) -a $(dff).vhdl
-	$(GHDL) -e $(dff)
+D_FlipFlop: D_FlipFlop.vhdl
+	$(GHDL) -a $^
 
-$(SR): $(sr)
-	$(GHDL) -a $(sr).vhdl
-	$(GHDL) -e $(sr)
+SR: shift_register.vhdl
+	$(GHDL) -a $^
 
 
 clean:
@@ -38,3 +30,6 @@ clean:
 	@echo "clean"
 
 re: clean all
+
+open: clean all
+	gtkwave $(TRGT) &

@@ -19,10 +19,10 @@ architecture t_ss of test_SumSec is
 begin
 
     test : SumSec port map (Clk => Clk_s,
-                            SC => SC_s,
-                            iA => iA_s,
-                            iB => iB_s,
-                            SM => SM_s);
+                            SC  => SC_s,
+                            iA  => iA_s,
+                            iB  => iB_s,
+                            SM  => SM_s);
     
     SC_s <= '1';
     
@@ -42,7 +42,7 @@ begin
             iB_s <= '0';
             wait for T;
             
-            iA_s <= '1';
+            iA_s <= '0';
             iB_s <= '0';
             wait for T;
             
@@ -50,19 +50,14 @@ begin
             iB_s <= '0';
             wait for T;
             
-            iA_s <= '1';
+            iA_s <= '0';
             iB_s <= '0';
             wait for T;
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
+
+            iA_s <= '0';
+            iB_s <= '0';
+            wait for T;
+
     end process;
 
 end architecture t_ss;

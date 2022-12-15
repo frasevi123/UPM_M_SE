@@ -23,20 +23,12 @@ architecture arch_sumsec of SumSec is
               Q, No_Q : out STD_LOGIC);
     end component;
     
-    
-    signal CLK_s   : STD_LOGIC;
-    
-    signal SRAo_s  : STD_LOGIC; --
-    signal SRBo_s  : STD_LOGIC; --
-    
-    signal DFFQ_s  : STD_LOGIC;
-    signal DFFQn_s : STD_LOGIC;
-    
-    signal S_s     : STD_LOGIC;
-    signal Cout_s  : STD_LOGIC;
-    
-    signal SM_s    : STD_LOGIC;
-    
+    signal CLK_s          : STD_LOGIC; -- Señal clock
+    signal SRAo_s, SRBo_s : STD_LOGIC; -- Señales de salida de los registros
+    signal DQ_s, DQn_s    : STD_LOGIC; -- Señales de salida del biestable
+    signal Cout_s, S_s    : STD_LOGIC; -- Señales de salida del sumador
+    signal SM_s           : STD_LOGIC; -- Salida del último registro; resultado
+
 begin
 
     CLK_s <= Clk NAND SC;
@@ -50,24 +42,23 @@ begin
     port map (si  => iB,
               clk => CLK_s,
               so  => SRBo_s);
-              
-    DFF : D_FlipFlop
-    port map (D    => Cout_s,
-              Clk  => CLK_s,
-              Q    => DFFQ_s,
-              No_Q => DFFQn_s);
-              
-              
+
     Sumador : ST
     port map (A    => SRAo_s,
               B    => SRBo_s,
-              Cin  => DFFQ_s,
+              Cin  => DQ_s,
               S    => S_s,
               Cout => Cout_s);
 
-    SR_c : shift_register
+    Biestable : D_FlipFlop
+    port map (D    => Cout_s,
+              Clk  => CLK_s,
+              Q    => DQ_s,
+              No_Q => DQn_s);
+
+    SR_C : shift_register
     port map (si  => S_s,
-              clk => CLK_s,
+              Clk => CLK_S,
               so  => SM_s);
 
     SM <= SM_s;

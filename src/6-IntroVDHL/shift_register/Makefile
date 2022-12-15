@@ -5,7 +5,7 @@ TRGT = wave.ghw
 SRC = shift_register
 TST = test_shift_register
 
-.PHONY: all clean re
+.PHONY: all clean re open
 
 all: $(TRGT)
 
@@ -21,3 +21,6 @@ clean:
 	@echo "clean"
 
 re: clean all
+
+open: re
+	gtkwave $(TRGT) &
