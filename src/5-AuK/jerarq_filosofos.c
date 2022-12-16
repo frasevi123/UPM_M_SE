@@ -137,25 +137,32 @@ void init_uart(void)
 }
 
 
+#define NUM_FIL 5
 
-int x;
-int tenedores[5] = {0};
+Tmutex semprint;
+#define prints(...) ({\                                                     
+         mutex_lock(&semprint);\
+         printf(__VA_ARGS__);\
+         mutex_unlock(&semprint);\
+     })  
 
-Tsemaphore semprint;
-
-#define prints(...) wait(&semprint); printf(__VA_ARGS__); signal(&semprint);
+Tsemaphore tenedores[NUM_FIL];
 
 
-void comer(int id) {
-    prints("[Filósofo %d] comiendo.\n", id);
-    
-}
 
 void cogertenedores(int id) {
     int ten1 = id;
     int ten2 = (id + 1) % 5;
     
     prints("[Filósofo %d] cogiendo tenedores %d y %d.\n", id, ten1, ten2);
+    if (ten1 > ten2) { /* último filósofo */
+        signal(&tenedores[ten1]);
+        signal(&tenedores[ten2]);
+    }
+    else {
+        signal(&tenedores[ten2]);
+        signal(&tenedores[ten1]);
+    }
 }
 
 void soltartenedores(int id) {
@@ -163,10 +170,14 @@ void soltartenedores(int id) {
     int ten2 = (id + 1) % 5;
     
     prints("[Filósofo %d] soltando tenedores %d y %d.\n", id, ten1, ten2);
-}
-
-void meditar(int id) {
-    prints("[Filósofo %d] meditando.\n", id);
+    if (ten1 > ten2) { /* último filósofo */
+        wait(&tenedores[ten1]);
+        wait(&tenedores[ten2]);
+    }
+    else {
+        wait(&tenedores[ten2]);
+        wait(&tenedores[ten1]);
+    }
 }
 
 void filosofo()
@@ -175,9 +186,9 @@ void filosofo()
 
     while(1)
     {
-        meditar(id);
+        prints("[Filósofo %d] meditando.\n", id);
         cogertenedores(id);
-        comer(id);
+        prints("[Filósofo %d] comiendo.\n", id);
         soltartenedores(id);
     }
 }
@@ -187,19 +198,27 @@ int main(void)
     init_micro();
     init_ports();
     init_uart();
-    int i;
+    int i, x;
     
     x = init_AuK(39.6288E+6,0.01);
+
     
     if (x == 0)
     {
+        for (i = 0; i < NUM_FIL; i++) {
+            init_semaphore(&tenedores[i], 1);
+        }
+
         init_semaphore(&semprint, 1);
+
         for (i = 0; i < 4; i++) {
             tenedores[i] = create_task(__builtin_tblpage(filosofo),
                                        __builtin_tbloffset(filosofo), 300, 1);
         }
+
         start_AuK();
     }
+
     Sleep();
     return(0);
 }

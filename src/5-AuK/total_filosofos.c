@@ -150,15 +150,6 @@ unsigned int tenedores[NUM_FIL];
 Tsemaphore   turno;
 
 
-
-/*
- * Esta solución no es en realidad de asignación total. Hay un único semáforo
- * que controla las lecturas sincronizadas del array de tenedores, lo que
- * garantiza que son atómicas. Pero sin un mecanismo de semáforos más complejo
- * al estilo de pthread_mutex_trylock, que compruebe el estado del semáforo
- * de forma atómica antes de cogerlo, creo que no se puede realizar una
- * solución real de asignación total.
- */
 void cogertenedores(int id) {
     int cent = 0;
     int ten1 = id;
@@ -183,13 +174,15 @@ void soltartenedores(int id) {
     int ten1 = id;
     int ten2 = (id + 1) % 5;
     
-    wait(&turno);
+    /* Creo que no es necesario coger el semáforo para soltar los
+     * tenedores */
+    // wait(&turno);
     
     prints("[Filósofo %d] suelta tenedores %d y %d.\n", id, ten1, ten2);
     tenedores[ten1] = 0;
     tenedores[ten2] = 0;
     
-    signal(&turno);
+    // signal(&turno);
 
 }
 
@@ -214,12 +207,12 @@ int main(void)
     int i, x;
     int filosofos[NUM_FIL];
     
+    /* Inicializar tenedores a cero */
     for (i = 0; i < NUM_FIL; i++) {
         tenedores[i] = 0;
     }
     
-    
-    x = init_AuK(39.6288E+6,0.01);
+    x = init_AuK(39.6288E+6, 0.01);
     
     if (x == 0)
     {
