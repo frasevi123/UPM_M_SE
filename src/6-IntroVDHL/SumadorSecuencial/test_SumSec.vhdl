@@ -34,8 +34,17 @@ begin
     end process;
 
     test_proc : process begin
+        -- Los bits se meten en "orden inverso".
+        -- Para meter 2 en el registro y que quede así |0|0|1|0|
+        --  se tiene que meter primero un 0, luego un 1, y luego dos 0.
+        -- Para meter 5 en el registro y que quede así |0|1|0|1|
+        --  se tiene que meter primero un 1, luego 0, luego 1, y luego 0
+        -- La salida daría 7, también al revés: |1|1|1|0|, porque va
+        --  sumando los bits de menos a más significativos, y los
+        --  saca en ese orden también.
+        -- 2 + 5 = 7
             iA_s <= '0';
-            iB_s <= '0';
+            iB_s <= '1';
             wait for T;
             
             iA_s <= '1';
@@ -43,17 +52,9 @@ begin
             wait for T;
             
             iA_s <= '0';
-            iB_s <= '0';
+            iB_s <= '1';
             wait for T;
             
-            iA_s <= '1';
-            iB_s <= '0';
-            wait for T;
-            
-            iA_s <= '0';
-            iB_s <= '0';
-            wait for T;
-
             iA_s <= '0';
             iB_s <= '0';
             wait for T;
