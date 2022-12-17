@@ -163,6 +163,7 @@ void cogertenedores(int id) {
         {
             tenedores[ten1] = 1;
             tenedores[ten2] = 1;
+            prints("|    [%d] Coge %d y %d.         |\n", id, ten1, ten2);
             cent = 1;
         }
     }
@@ -177,8 +178,7 @@ void soltartenedores(int id) {
     /* Creo que no es necesario coger el semáforo para soltar los
      * tenedores */
     // wait(&turno);
-    
-    prints("[Filósofo %d] suelta tenedores %d y %d.\n", id, ten1, ten2);
+    prints("|    [%d] Suelta %d y %d.       |\n", id, ten1, ten2);
     tenedores[ten1] = 0;
     tenedores[ten2] = 0;
     
@@ -192,10 +192,12 @@ void filosofo()
 
     while(1)
     {
-        prints("[Filósofo %d] meditando.\n", id);
+        prints("+------ [ Comienza %d ] ------+\n", id);
+        prints("| [%d] Meditando.             |\n", id);
         cogertenedores(id);
-        prints("[Filósofo %d] comiendo.\n", id);
+        prints("| [%d] COMIENDO.              |\n", id);
         soltartenedores(id);
+        prints("+------ [ Finaliza %d ] ------+\n", id);
     }
 }
 
@@ -216,7 +218,7 @@ int main(void)
     
     if (x == 0)
     {
-        init_semaphore(&semprint, 1);
+        mutex_init(&semprint, 1);
         init_semaphore(&turno, 1);
         for (i = 0; i < NUM_FIL; i++) {
             filosofos[i] = create_task(__builtin_tblpage(filosofo),
@@ -227,3 +229,4 @@ int main(void)
     Sleep();
     return(0);
 }
+

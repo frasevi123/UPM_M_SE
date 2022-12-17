@@ -1,0 +1,96 @@
++------ [ Comienza 0 ] ------+
++------ [ Comienza 1 ] ------+
++------ [ Comienza 2 ] ------+
++------ [ Comienza 3 ] ------+
++------ [ Comienza 4 ] ------+
+| [0] Meditando.             |
+| [1] Meditando.             |
+| [2] Meditando.             |
+| [3] Meditando.             |
+| [4] Meditando.             |
+|    [0] Coge 0 y 1.         |
+| [0] COMIENDO.              |
+|    [0] Suelta 0 y 1.       |
++------ [ Finaliza 0 ] ------+
+|    [1] Coge 1 y 2.         |
++------ [ Comienza 0 ] ------+
+| [1] COMIENDO.              |
+| [0] Meditando.             |
+|    [1] Suelta 1 y 2.       |
++------ [ Finaliza 1 ] ------+
+|    [2] Coge 2 y 3.         |
++------ [ Comienza 1 ] ------+
+| [2] COMIENDO.              |
+| [1] Meditando.             |
+|    [2] Suelta 2 y 3.       |
++------ [ Finaliza 2 ] ------+
+|    [3] Coge 3 y 4.         |
++------ [ Comienza 2 ] ------+
+| [3] COMIENDO.              |
+| [2] Meditando.             |
+|    [3] Suelta 3 y 4.       |
++------ [ Finaliza 3 ] ------+
+|    [4] Coge 4 y 0.         |
++------ [ Comienza 3 ] ------+
+| [4] COMIENDO.              |
+| [3] Meditando.             |
+|    [4] Suelta 4 y 0.       |
++------ [ Finaliza 4 ] ------+
+|    [0] Coge 0 y 1.         |
++------ [ Comienza 4 ] ------+
+| [0] COMIENDO.              |
+| [4] Meditando.             |
+|    [0] Suelta 0 y 1.       |
++------ [ Finaliza 0 ] ------+
+|    [1] Coge 1 y 2.         |
++------ [ Comienza 0 ] ------+
+| [1] COMIENDO.              |
+| [0] Meditando.             |
+|    [1] Suelta 1 y 2.       |
++------ [ Finaliza 1 ] ------+
+|    [2] Coge 2 y 3.         |
++------ [ Comienza 1 ] ------+
+| [2] COMIENDO.              |
+| [1] Meditando.             |
+|    [2] Suelta 2 y 3.       |
++------ [ Finaliza 2 ] ------+
+|    [3] Coge 3 y 4.         |
++------ [ Comienza 2 ] ------+
+| [3] COMIENDO.              |
+| [2] Meditando.             |
+|    [3] Suelta 3 y 4.       |
++------ [ Finaliza 3 ] ------+
+|    [4] Coge 4 y 0.         |
++------ [ Comienza 3 ] ------+
+| [4] COMIENDO.              |
+| [3] Meditando.             |
+|    [4] Suelta 4 y 0.       |
++------ [ Finaliza 4 ] ------+
+|    [0] Coge 0 y 1.         |
++------ [ Comienza 4 ] ------+
+| [0] COMIENDO.              |
+| [4] Meditando.             |
+|    [0] Suelta 0 y 1.       |
++------ [ Finaliza 0 ] ------+
+|    [1] Coge 1 y 2.         |
++------ [ Comienza 0 ] ------+
+| [1] COMIENDO.              |
+| [0] Meditando.             |
+|    [1] Suelta 1 y 2.       |
++------ [ Finaliza 1 ] ------+
+|    [2] Coge 2 y 3.         |
++------ [ Comienza 1 ] ------+
+| [2] COMIENDO.              |
+| [1] Meditando.             |
+|    [2] Suelta 2 y 3.       |
++------ [ Finaliza 2 ] ------+
+|    [3] Coge 3 y 4.         |
++------ [ Comienza 2 ] ------+
+| [3] COMIENDO.              |
+| [2] Meditando.             |
+|    [3] Suelta 3 y 4.       |
++------ [ Finaliza 3 ] ------+
+|    [4] Coge 4 y 0.         |
++------ [ Comienza 3 ] ------+
+| [4] COMIENDO.              |
+| [3] Meditand
